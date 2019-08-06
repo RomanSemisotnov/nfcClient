@@ -10,5 +10,5 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+123
 Route::get('{any}', 'RequestController')->where('any', '.*');
