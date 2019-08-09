@@ -23,10 +23,10 @@ class RequestController extends Controller
         $url_withOut_protocol = preg_replace('@^http(s)?://@i', '', $request->url());
         $url_params = explode('/', $url_withOut_protocol);
 
-       // $client = $this->clientService->getClientByName();
+       // $client = $this->clientService->getClientBySubDomain();
        // $client_params = $client->params;
 
-        return $this->clientService->getName();
+        return $this->clientService->getSubDomainName();
       /*  for ($i = 0, $url_params_index = 1; $i < count($client_params); $i++, $url_params_index++) {
             $current_variables=$client_params[$i]->variables->pluck('name')->toArray();
             if(!in_array($url_params[$url_params_index] ,$current_variables )){

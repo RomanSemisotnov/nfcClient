@@ -21,15 +21,15 @@ class ClientService
         $this->request=$request;
     }
 
-    public function getName()
+    public function getSubDomainName()
     {
-        return preg_replace('@^http(s)?://@i', '', $this->request->root());
+        return explode('.', preg_replace('@^http(s)?://@i', '', $this->request->root()))[0];
     }
 
-    public function getClientByName()
+    public function getClientBySubDomain()
     {
         try {
-            return Client::whereName($this->getName())->with('params.variables')->first();
+            return Client::whereSubdomain($this->getSubDomainName())->with('params.variables')->first();
         } catch (\Exception $e) {
             abort(404, 'Client not found');
         }
