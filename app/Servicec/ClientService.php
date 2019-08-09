@@ -15,15 +15,22 @@ use Illuminate\Http\Request;
 class ClientService
 {
 
-    public function getName(Request $request)
+    protected $request;
+    public function __construct(Request $request)
     {
-        return preg_replace('@^http(s)?://@i', '', $request->root());
+        $this->request=$request;
+    }
+
+    public function getName()
+    {
+        return 'dodo';
+        //return preg_replace('@^http(s)?://@i', '', $this->request->root());
     }
 
     public function getClientByName()
     {
         try {
-            return Client::whereName($this->getName())->first();
+            return Client::whereName($this->getName())->with('params.variables')->first();
         } catch (\Exception $e) {
             abort(404, 'Client not found');
         }

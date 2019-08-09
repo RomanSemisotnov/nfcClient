@@ -10,7 +10,7 @@ class Client extends Model
 
     public function params()
     {
-        return $this->hasMany(QueryParam::class);
+        return $this->hasMany(QueryParam::class)->orderBy('index_number');
     }
 
 
