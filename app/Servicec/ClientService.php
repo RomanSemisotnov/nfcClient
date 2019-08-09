@@ -28,11 +28,7 @@ class ClientService
 
     public function getClientBySubDomain()
     {
-        try {
-            return Client::whereSubdomain($this->getSubDomainName())->with('params.variables')->first();
-        } catch (\Exception $e) {
-            abort(404, 'Client not found');
-        }
+        return Client::whereSubdomain($this->getSubDomainName())->with('params.variables')->first();
     }
 
 }
