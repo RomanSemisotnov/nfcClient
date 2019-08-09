@@ -23,13 +23,13 @@ class RequestController extends Controller
         $url_withOut_protocol = preg_replace('@^http(s)?://@i', '', $request->url());
         $url_params = explode('/', $url_withOut_protocol);
 
-       // $client = $this->clientService->getClientBySubDomain();
-       // $client_params = $client->params;
+        $client = $this->clientService->getClientBySubDomain();
+        $client_params = $client->params;
 
-        return $this->clientService->getSubDomainName();
-      /*  for ($i = 0, $url_params_index = 1; $i < count($client_params); $i++, $url_params_index++) {
-            $current_variables=$client_params[$i]->variables->pluck('name')->toArray();
-            if(!in_array($url_params[$url_params_index] ,$current_variables )){
+
+        for ($i = 0, $url_params_index = 1; $i < count($client_params); $i++, $url_params_index++) {
+            $current_variables = $client_params[$i]->variables->pluck('name')->toArray();
+            if (!in_array($url_params[$url_params_index], $current_variables)) {
                 IncorrentRequest::create([
                     'uri' => $request->url(),
                     'client_id' => $client->id,
@@ -44,8 +44,8 @@ class RequestController extends Controller
         ]);
 
         for ($i = 0, $url_params_index = 1; $i < count($client_params); $i++, $url_params_index++) {
-            foreach($client_params[$i]->variables as $variable){
-                if($variable->name === $url_params[$url_params_index]){
+            foreach ($client_params[$i]->variables as $variable) {
+                if ($variable->name === $url_params[$url_params_index]) {
                     CorrectRequestParam::create([
                         'correctrequest_id' => $request->id,
                         'queryparam_id' => $client_params[$i]->id,
@@ -55,7 +55,7 @@ class RequestController extends Controller
             }
         }
 
-        return redirect($client->uri);*/
+        return redirect($client->uri);
     }
 
 
