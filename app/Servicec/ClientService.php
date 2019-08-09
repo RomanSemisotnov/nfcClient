@@ -23,8 +23,7 @@ class ClientService
 
     public function getName()
     {
-        return 'dodo';
-        //return preg_replace('@^http(s)?://@i', '', $this->request->root());
+        return preg_replace('@^http(s)?://@i', '', $this->request->root());
     }
 
     public function getClientByName()

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Client extends Model
 {
-    protected $fillable = ['name', 'uri'];
+    protected $fillable = ['name', 'uri', 'subdomain'];
 
     public function params()
     {

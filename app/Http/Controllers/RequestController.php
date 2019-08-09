@@ -23,10 +23,11 @@ class RequestController extends Controller
         $url_withOut_protocol = preg_replace('@^http(s)?://@i', '', $request->url());
         $url_params = explode('/', $url_withOut_protocol);
 
-        $client = $this->clientService->getClientByName();
-        $client_params = $client->params;
+       // $client = $this->clientService->getClientByName();
+       // $client_params = $client->params;
 
-        for ($i = 0, $url_params_index = 1; $i < count($client_params); $i++, $url_params_index++) {
+        return $this->clientService->getName();
+      /*  for ($i = 0, $url_params_index = 1; $i < count($client_params); $i++, $url_params_index++) {
             $current_variables=$client_params[$i]->variables->pluck('name')->toArray();
             if(!in_array($url_params[$url_params_index] ,$current_variables )){
                 IncorrentRequest::create([
@@ -54,7 +55,7 @@ class RequestController extends Controller
             }
         }
 
-        return redirect($client->uri);
+        return redirect($client->uri);*/
     }
 
 
