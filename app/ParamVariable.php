@@ -18,7 +18,8 @@ class ParamVariable extends Model
 
     public function requests()
     {
-        return $this->belongsToMany(CorrectRequest::class, 'request_variable');
+        return $this->belongsToMany(CorrectRequest::class, 'request_variable',
+            'paramvariable_id', 'correctrequest_id');
     }
 
 }
