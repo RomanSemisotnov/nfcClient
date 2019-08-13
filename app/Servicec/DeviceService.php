@@ -16,9 +16,8 @@ class DeviceService
 
     protected $detect;
 
-    public function __construct()
+    public function __construct(Mobile_Detect $detect)
     {
-        $detect=new Mobile_Detect();
         $this->detect = $detect;
     }
 
@@ -41,7 +40,7 @@ class DeviceService
     {
         if ($this->detect->isiPhone()) {
             return 'Iphone';
-        } else if ($this->detect->isSamsung()()) {
+        } else if ($this->detect->isSamsung()) {
             return 'Samsung';
         } else if ($this->detect->isSony()) {
             return 'Sony';
