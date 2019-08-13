@@ -16,8 +16,9 @@ class DeviceService
 
     protected $detect;
 
-    public function __construct(Mobile_Detect $detect)
+    public function __construct()
     {
+        $detect=new Mobile_Detect();
         $this->detect = $detect;
     }
 
