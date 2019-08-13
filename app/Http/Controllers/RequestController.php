@@ -25,6 +25,7 @@ class RequestController extends Controller
 
     public function __invoke(Request $request)
     {
+        return $_SERVER['HTTP_USER_AGENT'];
         try {
             $client = $this->clientService->get();
 
