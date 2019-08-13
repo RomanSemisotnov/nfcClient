@@ -28,6 +28,7 @@ class ClientService
 
     public function getClientBySubDomain()
     {
+        return Client::whereSubdomain('dodo')->with('params.variables')->first();
         return Client::whereSubdomain($this->getSubDomainName())->with('params.variables')->first();
     }
 

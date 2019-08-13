@@ -8,12 +8,12 @@ class Uid extends Model
 {
 
     protected $fillable = [
-        'value'
+        'value', 'patternlink_id'
     ];
 
-    public function link()
+    public function patternlink()
     {
-        return $this->hasOne(Link::class);
+        return $this->belongsTo(PatternLink::class);
     }
 
 

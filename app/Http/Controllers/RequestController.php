@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\CorrectRequest;
-use App\CorrectRequestParam;
 use App\IncorrentRequest;
+use App\PatternLink;
 use App\Servicec\ClientService;
 use Illuminate\Http\Request;
+use mysql_xdevapi\Exception;
 
 class RequestController extends Controller
 {
@@ -25,7 +26,11 @@ class RequestController extends Controller
 
         $client = $this->clientService->getClientBySubDomain();
 
-        try{
+        try {
+            $link = PatternLink::whereClient_idAndValue($client->id, $request->url())->first();
+            if ($link === null)
+                throw new \Exception('link not found');
+
             $client_params = $client->params;
 
             for ($i = 0, $url_params_index = 1; $i < count($client_params); $i++, $url_params_index++) {
@@ -36,35 +41,33 @@ class RequestController extends Controller
                         'client_id' => $client->id,
                         'ip' => $request->ip()
                     ]);
-                    return redirect($client->uri);
+                    return redirect($link->redirectTo);
                 }
             }
 
-            $request = CorrectRequest::create([
+            $correct_request = CorrectRequest::create([
                 'client_id' => $client->id,
                 'ip' => $request->ip()
             ]);
-
+            $variable_ids = [];
             for ($i = 0, $url_params_index = 1; $i < count($client_params); $i++, $url_params_index++) {
                 foreach ($client_params[$i]->variables as $variable) {
                     if ($variable->name === $url_params[$url_params_index]) {
-                        CorrectRequestParam::create([
-                            'correctrequest_id' => $request->id,
-                            'queryparam_id' => $client_params[$i]->id,
-                            'paramvariable_id' => $variable->id
-                        ]);
+                        $variable_ids[] = $variable->id;
                     }
                 }
             }
-        }catch (\Exception $e){
+            $correct_request->addVariable($variable_ids);
+
+            return redirect($link->redirectTo);
+        } catch (\Exception $e) {
             IncorrentRequest::create([
                 'uri' => $request->url(),
                 'client_id' => $client->id,
                 'ip' => $request->ip()
             ]);
+            return '404 not found';
         }
-
-        return redirect($client->uri);
     }
 
 
