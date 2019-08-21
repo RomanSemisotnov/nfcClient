@@ -8,7 +8,7 @@ class QueryParam extends Model
 {
     protected $table = 'query_params';
 
-    protected $fillable = ['name', 'client_id', 'type', 'index_number'];
+    protected $fillable = ['name', 'client_id', 'index_number'];
 
     public function client()
     {
