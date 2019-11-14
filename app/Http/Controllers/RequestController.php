@@ -10,6 +10,7 @@ use App\IncorrentRequest;
 use App\PatternLink;
 use App\Servicec\ClientService;
 use App\Servicec\DeviceService;
+use App\Uid;
 use Illuminate\Http\Request;
 
 class RequestController extends Controller
@@ -42,39 +43,34 @@ class RequestController extends Controller
             $device = Device::firstOrCreate(['name' => $deviceName]);
 
             $fullRequest = explode('/', $request->url());
-            $uid = array_pop($fullRequest);
+            $uidValue = array_pop($fullRequest);
             $urlWithOutUid = implode('/', $fullRequest) . '/';
 
-            $link = PatternLink::whereValue($urlWithOutUid)->whereHas('uids', function ($query) use ($uid) {
-                $query->whereValue($uid);
+            $link = PatternLink::whereValue($urlWithOutUid)->whereHas('uids', function ($query) use ($uidValue) {
+                $query->whereValue($uidValue);
             })->with('uids')->first();
 
             if ($link === null)
-                throw new InvalidRequestException('link not found');
+                throw new InvalidRequestException('Link not found');
 
-            // ПРОДОЛЖАЕМ ТУТ
             $url_withOut_protocol = preg_replace('@^http(s)?://@i', '', $request->url());
             $url_params = explode('/', $url_withOut_protocol);
             array_shift($url_params);
             array_pop($url_params);
 
-            $client_params = $client->params;
-
-            foreach ($link->uids as $linkUid) {
-                if ($linkUid->value === $uid) {
-                    $uid_id = $linkUid->id;
-                }
-            }
+            $uidIndexInCollection = array_search(trim($uidValue), $link->uids->pluck('value')->toArray());
 
             $correct_request = CorrectRequest::create([
                 'client_id' => $client->id,
                 'device_id' => $device->id,
                 'ip' => $request->ip(),
-                'uid_id' => $uid_id
+                'uid_id' => $link->uids->get($uidIndexInCollection)->id
             ]);
 
             $variable_ids = [];
-            for ($i = 0; $i < count($client_params); $i++) {
+            $client_params = $client->params;
+            $client_params_count = count($client_params);
+            for ($i = 0; $i < $client_params_count; $i++) {
                 foreach ($client_params[$i]->variables as $variable) {
                     if ($variable->name === $url_params[$i]) {
                         $variable_ids[] = $variable->id;
@@ -94,7 +90,7 @@ class RequestController extends Controller
                 'ip' => $request->ip()
             ]);
             return 'is not a telephone or table';
-        }catch(InvalidRequestException $e){
+        } catch (InvalidRequestException $e) {
             IncorrentRequest::create([
                 'uri' => $request->url(),
                 'client_id' => $client->id,
@@ -103,7 +99,7 @@ class RequestController extends Controller
             ]);
             return '404 not found';
         } catch (\Exception $e) {
-            return "Обратитесь к Роману <br>".$e->getMessage();
+            return "Обратитесь к Роману <br>" . $e->getMessage() . " " . $e->getLine();
         }
     }
 
