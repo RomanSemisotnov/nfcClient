@@ -10,7 +10,6 @@ use App\IncorrentRequest;
 use App\PatternLink;
 use App\Servicec\ClientService;
 use App\Servicec\DeviceService;
-use App\Uid;
 use Illuminate\Http\Request;
 
 class RequestController extends Controller
@@ -33,13 +32,8 @@ class RequestController extends Controller
             if ($this->deviceService->isComputer())
                 throw new InvalidDeviceException();
 
-            if ($this->deviceService->isMobile()) {
-                $deviceName = $this->deviceService->getMobile();
-            } elseif ($this->deviceService->isTablet()) {
-                $deviceName = $this->deviceService->getTablet();
-            } else {
-                $deviceName = 'unknown';
-            }
+            $deviceName = $this->deviceService->getDevice();
+
             $device = Device::firstOrCreate(['name' => $deviceName]);
 
             $fullRequest = explode('/', $request->url());

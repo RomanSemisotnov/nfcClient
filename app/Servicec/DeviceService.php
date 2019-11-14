@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: russian_rave
- * Date: 8/13/2019
- * Time: 8:07 PM
- */
 
 namespace App\Servicec;
-
 
 use Mobile_Detect;
 
@@ -41,13 +34,13 @@ class DeviceService
         if ($this->detect->isiPhone()) {
             return 'Iphone';
         } else if ($this->detect->isSamsung()) {
-            return 'Samsung';
+            return 'Samsung phone';
         } else if ($this->detect->isSony()) {
-            return 'Sony';
+            return 'Sony phone';
         } else if ($this->detect->isAsus()) {
-            return 'Asus';
+            return 'Asus phone';
         } else {
-            return 'Another';
+            return 'Another phone';
         }
     }
 
@@ -62,7 +55,18 @@ class DeviceService
         } else if ($this->detect->isAcerTablet()) {
             return 'Asus tablet';
         } else {
-            return 'Another';
+            return 'Another tablet';
+        }
+    }
+
+    public function getDevice(): string
+    {
+        if ($this->isMobile()) {
+            return $this->getMobile();
+        } elseif ($this->isTablet()) {
+            return $this->getTablet();
+        } else {
+            return 'unknown';
         }
     }
 
