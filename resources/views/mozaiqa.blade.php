@@ -32,8 +32,13 @@
         xhr.send(body);
 
         let redirectTo = '<?php echo $redirectTo?>';
-        window.location.href = redirectTo;
-    }, promotionDuration * 1000);
+        xhr.onload = function () {
+            window.location.href = redirectTo;
+        };
+        xhr.onerror = function () {
+            window.location.href = redirectTo;
+        };
+    }, (promotionDuration-0.5) * 1000);
 </script>
 
 </body>
