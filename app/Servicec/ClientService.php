@@ -22,8 +22,8 @@ class ClientService
 
     public function get()
     {
-       // return Client::whereSubdomain('mozaiqa')->with('params.variables')->first();
-        return Client::whereSubdomain($this->getSubDomainName())->with('params.variables')->first();
+        return Client::whereSubdomain('mozaiqa')->with('params.variables')->first();
+        //return Client::whereSubdomain($this->getSubDomainName())->with('params.variables')->first();
     }
 
 }

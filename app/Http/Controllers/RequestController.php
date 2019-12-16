@@ -10,6 +10,7 @@ use App\IncorrentRequest;
 use App\PatternLink;
 use App\Servicec\ClientService;
 use App\Servicec\DeviceService;
+use App\Uid;
 use Illuminate\Http\Request;
 
 class RequestController extends Controller
@@ -29,8 +30,8 @@ class RequestController extends Controller
         try {
             $client = $this->clientService->get();
 
-            if ($this->deviceService->isComputer())
-                throw new InvalidDeviceException();
+            //   if ($this->deviceService->isComputer())
+            //     throw new InvalidDeviceException();
 
             $deviceName = $this->deviceService->getDevice();
 
@@ -73,6 +74,17 @@ class RequestController extends Controller
             }
 
             $correct_request->addVariable($variable_ids);
+
+            $uid = Uid::whereId($link->uids->get($uidIndexInCollection)->id)->with('record')->first();
+
+            if ($uid->record->promotionViewPathName !== null) {
+                return view($uid->record->promotionViewPathName)->with([
+                    'clientName' => $client->name,
+                    'redirectTo' => $link->redirectTo,
+                    'correct_request_id' => $correct_request->id,
+                    'promotionDuration' => $uid->record->promotionDuration
+                ]);
+            }
 
             return redirect($link->redirectTo);
         } catch (InvalidDeviceException $e) {

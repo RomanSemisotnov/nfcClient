@@ -10,4 +10,4 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('{any}', 'RequestController')->where('any', '.*');
+Route::get('/{any}', 'RequestController')->where('any', '.*');

@@ -7,11 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Record extends Model
 {
 
-
     protected $fillable = [
-        'patternlink_id', 'needLinks', 'isActive', 'client_id'
+        'patternlink_id', 'needLinks', 'isActive', 'client_id', 'priceOneTag',
+        'promotionViewPathName', 'promotionDuration'
     ];
-
 
     public function uids()
     {
@@ -22,7 +21,5 @@ class Record extends Model
     {
         return $this->belongsTo(PatternLink::class, 'patternlink_id');
     }
-
-
 
 }

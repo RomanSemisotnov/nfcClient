@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class CorrectRequest extends Model
 {
 
-    protected $fillable = ['uid_id', 'client_id', 'device_id', 'ip'];
+    protected $fillable = ['uid_id', 'isConversion', 'client_id', 'device_id', 'ip'];
 
     public function variables()
     {
@@ -18,6 +18,11 @@ class CorrectRequest extends Model
     public function addVariable(array $variable_ids)
     {
         return $this->variables()->attach($variable_ids);
+    }
+
+    public function device()
+    {
+        return $this->belongsTo(Device::class);
     }
 
 }
