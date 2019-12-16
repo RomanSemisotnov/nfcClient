@@ -32,7 +32,7 @@
         xhr.send(body);
 
         let redirectTo = '<?php echo $redirectTo?>';
-        window.location.href = redirectTo;
+        //window.location.href = redirectTo;
     }, promotionDuration * 1000);
 </script>
 
